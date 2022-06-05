@@ -1,90 +1,13 @@
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:qurannow/models/KotaModel.dart';
 
 class LocationController extends GetxController {
-  var isSearching = false.obs;
+  var isLoading = false.obs;
 
-  void getCurrentLocation() async {
-    isSearching(true);
-    bool serviceEnabled;
-    LocationPermission permission;
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      return Future.error('Location services are disabled.');
-    }
+  RxList listKota = <KotaModel>[].obs;
 
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-    await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.best,
-            forceAndroidLocationManager: true,
-            timeLimit: Duration(milliseconds: 5000))
-        .then((Position value) {
-      isSearching(false);
-      print(value);
-    }).catchError((e) {
-      print(e);
-    });
-  }
-
-  void determinePosition() async {
-    print('aa');
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-
-    await Geolocator.getCurrentPosition().then((Position value) {
-      print(value.latitude);
-    });
-    print('bb');
+  @override
+  void onInit() {
+    super.onInit();
   }
 }

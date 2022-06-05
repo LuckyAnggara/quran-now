@@ -10,7 +10,6 @@ class SuratModelSatuan {
     this.name,
     this.revelation,
     this.tafsir,
-    this.preBismillah,
     this.verses,
   });
 
@@ -20,7 +19,6 @@ class SuratModelSatuan {
   Name? name;
   Revelation? revelation;
   DataTafsir? tafsir;
-  PreBismillah? preBismillah;
   List<Verse>? verses;
 
   factory SuratModelSatuan.fromJson(Map<String, dynamic> json) => SuratModelSatuan(
@@ -30,7 +28,6 @@ class SuratModelSatuan {
         name: Name.fromJson(json["name"]),
         revelation: Revelation.fromJson(json["revelation"]),
         tafsir: DataTafsir.fromJson(json["tafsir"]),
-        preBismillah: PreBismillah.fromJson(json["preBismillah"]),
         verses: List<Verse>.from(json["verses"].map((x) => Verse.fromJson(x))),
       );
 }
@@ -73,17 +70,17 @@ class Translation {
 
 class PreBismillah {
   PreBismillah({
-    this.text,
+    this.latin,
     this.translation,
     this.audio,
   });
 
-  Text? text;
+  Latin? latin;
   Translation? translation;
   Audio? audio;
 
   factory PreBismillah.fromJson(Map<String, dynamic> json) => PreBismillah(
-        text: Text.fromJson(json["text"]),
+        latin: Latin.fromJson(json["text"]),
         translation: Translation.fromJson(json["translation"]),
         audio: Audio.fromJson(json["audio"]),
       );
@@ -104,8 +101,8 @@ class Audio {
       );
 }
 
-class Text {
-  Text({
+class Latin {
+  Latin({
     this.arab,
     this.transliteration,
   });
@@ -113,7 +110,7 @@ class Text {
   String? arab;
   Transliteration? transliteration;
 
-  factory Text.fromJson(Map<String, dynamic> json) => Text(
+  factory Latin.fromJson(Map<String, dynamic> json) => Latin(
         arab: json["arab"],
         transliteration: Transliteration.fromJson(json["transliteration"]),
       );
@@ -173,7 +170,7 @@ class Verse {
 
   Number? number;
   Meta? meta;
-  Text? text;
+  Latin? text;
   Translation? translation;
   Audio? audio;
   VerseTafsir? tafsir;
@@ -181,7 +178,7 @@ class Verse {
   factory Verse.fromJson(Map<String, dynamic> json) => Verse(
         number: Number.fromJson(json["number"]),
         meta: Meta.fromJson(json["meta"]),
-        text: Text.fromJson(json["text"]),
+        text: Latin.fromJson(json["text"]),
         translation: Translation.fromJson(json["translation"]),
         audio: Audio.fromJson(json["audio"]),
         tafsir: VerseTafsir.fromJson(json["tafsir"]),

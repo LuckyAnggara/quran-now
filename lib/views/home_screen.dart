@@ -4,8 +4,8 @@ import 'package:qurannow/constant.dart';
 import 'package:qurannow/widgets/app_bar_widget.dart';
 import 'package:qurannow/widgets/ayat_of_the_day_card.dart';
 import 'package:qurannow/widgets/card_date_widget.dart';
-import 'package:qurannow/widgets/explore_widget.dart';
 import 'package:qurannow/widgets/location_widget.dart';
+import 'package:qurannow/widgets/menu_widget.dart';
 import 'package:qurannow/widgets/prayer_time_widget.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -32,7 +32,7 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   LocationWidget(),
                   SizedBox(
-                    height: Get.height * .48,
+                    height: Get.height * .45,
                     width: Get.width,
                     child: Stack(
                       children: [
@@ -45,7 +45,7 @@ class HomeScreen extends StatelessWidget {
                   SizedBox(
                     height: 25,
                   ),
-                  const ExploreWidget()
+                  MenuWidget()
                 ],
               ))
             ],

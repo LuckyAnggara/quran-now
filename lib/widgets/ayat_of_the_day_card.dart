@@ -9,7 +9,7 @@ class AyatOfTheDayCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 0,
+      bottom: 1,
       right: 1,
       left: 1,
       child: Container(
@@ -32,7 +32,8 @@ class AyatOfTheDayCard extends StatelessWidget {
               child: Text(
                 "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ قُلْ أَعُوذُ بِرَبِّ النَّاسِ",
                 textAlign: TextAlign.right,
-                style: kArabicFontAmiri,
+                style: kArabicFontAmiri.copyWith(
+                    fontSize: 24, fontWeight: FontWeight.w500, overflow: TextOverflow.ellipsis),
               ),
             ),
             Text(

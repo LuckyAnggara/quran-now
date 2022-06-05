@@ -5,11 +5,14 @@ import 'package:supercharged/supercharged.dart';
 Color kPrimaryColor = '#ECF5F5'.toColor();
 // Color kSecondaryColor = '#39E1EB'.toColor();
 Color kSecondaryColor = '#ffa14ecf'.toColor();
+Color kSecondaryColorMoreBlack = '#dfa14e'.toColor();
 Color kBlackColor = '#1C2C3B'.toColor();
 Color kAccentColor = '#006C72'.toColor();
 
 Color kGreySecondaryColor = '#B6B9BF'.toColor();
 Color kBlackSecondaryColor = '#323232'.toColor();
+
+Color kShadowColor = const Color(0xFFE6E6E6);
 
 TextStyle kPrimaryFontStyle = GoogleFonts.roboto(
   fontSize: 16,
@@ -41,8 +44,9 @@ TextStyle kArabicFontNotoArabic =
     GoogleFonts.notoSansArabic(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.black);
 
 class ApiConstants {
-  static String prayTimeUrl = 'https://api.myquran.com/v1/sholat/jadwal';
+  static String prayTimeUrl = 'https://api.myquran.com/v1/sholat';
   static String quranUrl = 'https://api.quran.sutanlab.id';
+  static String quranUrlv2 = 'https://api.alquran.cloud/v1';
 // static String baseUrl = 'https://siapbaper.bbmakmur.com/api';
 // static String baseUrl = 'http://127.0.0.1:8000/api';
 // static String baseUrl = 'http://192.168.1.24:8000/api';

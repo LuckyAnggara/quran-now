@@ -53,7 +53,7 @@ class DateCardWidget extends StatelessWidget {
                 // ),
                 Text(
                   'Jangan lupa shalat Dhuha',
-                  style: kPrimaryWhiteFontStyle.copyWith(fontSize: 14),
+                  style: kPrimaryWhiteFontStyle.copyWith(fontSize: 16),
                 ),
               ],
             ),

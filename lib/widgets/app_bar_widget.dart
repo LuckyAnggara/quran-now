@@ -18,32 +18,43 @@ class AppBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      margin: EdgeInsets.only(bottom: 10),
       width: double.infinity,
       height: Get.height * .05,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          GestureDetector(
-            onTap: onPress,
-            child: leftIcon,
+          SizedBox(
+            width: Get.width * .2,
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: GestureDetector(
+                onTap: onPress,
+                child: leftIcon,
+              ),
+            ),
           ),
           // const Icon(
           //   Icons.menu,
           // ),
-          const Spacer(),
+          Spacer(),
           Text(
             title,
             style: kPrimaryFontStyle,
           ),
-          const Spacer(),
-          Row(
-              children: rightIcon!.map((e) {
-            return Container(
-              margin: const EdgeInsets.only(right: 10),
-              child: e,
-            );
-          }).toList())
+          Spacer(),
+          SizedBox(
+            width: Get.width * .2,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: rightIcon!.map((e) {
+                  return Container(
+                    margin: const EdgeInsets.only(right: 10),
+                    child: e,
+                  );
+                }).toList()),
+          )
         ],
       ),
     );

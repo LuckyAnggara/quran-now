@@ -18,10 +18,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(initialRoute: '/', getPages: [
       GetPage(name: '/', page: () => HomeScreen(), transition: Transition.fadeIn),
       GetPage(name: '/full-quran', page: () => FullQuranScreen(), transition: Transition.fadeIn),
-      GetPage(
-          name: '/read-quran/:suratNumber',
-          page: () => ReadQuranScreen(),
-          transition: Transition.fadeIn),
+      GetPage(name: '/read-quran', page: () => ReadQuranScreen(), transition: Transition.fadeIn),
     ]);
   }
 }

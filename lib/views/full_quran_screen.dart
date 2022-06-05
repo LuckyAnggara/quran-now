@@ -9,7 +9,7 @@ import 'package:qurannow/widgets/app_bar_widget.dart';
 class FullQuranScreen extends StatelessWidget {
   FullQuranScreen({Key? key}) : super(key: key);
 
-  final QuranController quranController = Get.put(QuranController());
+  final QuranController quranController = Get.put(QuranController(), tag: 'quranController');
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,9 @@ class FullQuranScreen extends StatelessWidget {
           child: Column(
             children: [
               AppBarWidget(
-                onPress: () {},
+                onPress: () {
+                  Get.back();
+                },
                 leftIcon: Icon(Icons.arrow_back_ios),
                 title: 'Al Qur\'an',
                 rightIcon: [],
@@ -49,7 +51,7 @@ class FullQuranScreen extends StatelessWidget {
                   children: [
                     Text(
                       'Terakhir dibaca',
-                      style: kPrimaryFontStyle.copyWith(fontSize: 12),
+                      style: kPrimaryFontStyle.copyWith(fontSize: 14, fontWeight: FontWeight.w500),
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 10, bottom: 10),
@@ -81,7 +83,8 @@ class FullQuranScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Surat',
-                        style: kPrimaryFontStyle.copyWith(fontSize: 14),
+                        style: kPrimaryFontStyle.copyWith(
+                            fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1.5),
                       ),
                       SizedBox(
                         height: 15,
@@ -124,7 +127,16 @@ class FullQuranScreen extends StatelessWidget {
   GestureDetector listSurat(SuratModelAll surat, bool isBookmark) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed('/read-quran/${surat.number}');
+        Get.toNamed(
+          '/read-quran',
+          arguments: {
+            'number': surat.number,
+            'name': surat.name!.transliteration!.id,
+            'translation': surat.name!.translation!.id,
+            'revelation': surat.revelation!.id,
+            'ayat': surat.numberOfVerses
+          },
+        );
       },
       child: InkWell(
         child: Container(
@@ -136,7 +148,7 @@ class FullQuranScreen extends StatelessWidget {
                 children: [
                   Text(
                     surat.number.toString(),
-                    style: kPrimaryFontStyle.copyWith(fontSize: 12),
+                    style: kPrimaryFontStyle.copyWith(fontSize: 16),
                   ),
                   SizedBox(
                     width: 15,
@@ -146,14 +158,17 @@ class FullQuranScreen extends StatelessWidget {
                     children: [
                       Text(
                         surat.name!.transliteration!.id!,
-                        style: kPrimaryFontStyle.copyWith(fontSize: 13),
+                        style: kPrimaryFontStyle.copyWith(fontSize: 15, letterSpacing: 1.2),
+                      ),
+                      SizedBox(
+                        height: 3,
                       ),
                       Text(
                         surat.name!.translation!.id!,
-                        style: kSecondaryGreyFontStyle.copyWith(fontSize: 10),
+                        style: kSecondaryGreyFontStyle.copyWith(fontSize: 13),
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
               Spacer(),
@@ -162,6 +177,13 @@ class FullQuranScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  Text(
+                    surat.name!.short!,
+                    style: kArabicFontAmiri.copyWith(fontSize: 18, letterSpacing: 1.2),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
                   Icon(
                     isBookmark ? Icons.bookmark : Icons.bookmark_outline,
                     color: kSecondaryColor,

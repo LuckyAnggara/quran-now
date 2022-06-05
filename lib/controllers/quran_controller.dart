@@ -29,16 +29,4 @@ class QuranController extends GetxController {
       isLoading(false);
     }
   }
-
-  void fetchSurat(suratNumber) async {
-    try {
-      isLoading(true);
-      var data = await _quranService.fetchSurat(suratNumber);
-      if (data != null) {
-        listSurat.value = data;
-      }
-    } finally {
-      isLoading(false);
-    }
-  }
 }
