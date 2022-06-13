@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:qurannow/models/SurahDetailModel.dart';
@@ -13,6 +14,10 @@ class ReadQuranController extends GetxController {
   final player = AudioPlayer();
   var playIndex = ''.obs;
   var isAudioPlay = false.obs;
+
+  var pageSize = 5.obs;
+
+  final ScrollController scrollController = ScrollController();
 
   @override
   void onInit() {
@@ -35,13 +40,28 @@ class ReadQuranController extends GetxController {
           break;
       }
     });
+
+    scrollController.addListener(_scrollListener);
+
     super.onInit();
   }
 
   @override
   void dispose() {
     player.dispose();
+    scrollController.removeListener(_scrollListener);
+    scrollController.dispose();
     super.dispose();
+  }
+
+  _scrollListener() {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent) {
+      pageSize.value = pageSize.value + 10;
+      print(pageSize.value);
+      if (pageSize.value > surat.value!.data![0].ayahs!.length) {
+        pageSize(surat.value!.data![0].ayahs!.length);
+      }
+    }
   }
 
   void pauseAudio() {

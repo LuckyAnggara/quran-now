@@ -2,21 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:qurannow/constant.dart';
+import 'package:qurannow/controllers/settings_controller.dart';
 import 'package:qurannow/models/SurahDetailModel.dart';
 import 'package:qurannow/widgets/app_bar_widget.dart';
+import 'package:qurannow/widgets/modal_bottom_setting_read_quran.dart';
 
 import '../controllers/read_quran_controller.dart';
 
 class ReadQuranScreen extends StatelessWidget {
   ReadQuranScreen({Key? key}) : super(key: key);
   ReadQuranController readQuranController = Get.put(ReadQuranController());
+  SettingsController settingsController = Get.put(SettingsController());
 
   @override
   Widget build(BuildContext context) {
-    readQuranController.fetchSurat(Get.arguments['number'].toString());
+    readQuranController.fetchSurat(Get.parameters['number'].toString());
 
     return SafeArea(
       child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => showFloatingModalBottomSheet(
+            context: context,
+            builder: (context) => ModalFitSetting(),
+          ),
+          backgroundColor: kSecondaryColor.withOpacity(1),
+          child: Icon(
+            Icons.more_horiz,
+          ),
+        ),
         backgroundColor: kPrimaryColor,
         body: Container(
           padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
@@ -37,6 +50,7 @@ class ReadQuranScreen extends StatelessWidget {
               ),
               Expanded(
                 child: SingleChildScrollView(
+                  controller: readQuranController.scrollController,
                   physics: BouncingScrollPhysics(),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
@@ -59,7 +73,7 @@ class ReadQuranScreen extends StatelessWidget {
                             var dataTranslate = readQuranController.surat.value!.data![2];
 
                             return Column(
-                              children: List.generate(data.ayahs!.length, (index) {
+                              children: List.generate(readQuranController.pageSize.value, (index) {
                                 return AyahWidget(
                                   onPlay: () {
                                     readQuranController.playAudio(
@@ -93,6 +107,7 @@ class AyahWidget extends StatelessWidget {
   final VoidCallback onPlay;
 
   final readQuranController = Get.find<ReadQuranController>();
+  final settingController = Get.find<SettingsController>();
 
   AyahWidget({
     required this.ayah,
@@ -102,113 +117,133 @@ class AyahWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 15),
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-            decoration: BoxDecoration(
-              color: kSecondaryColorMoreBlack.withOpacity(0.15),
-              borderRadius: const BorderRadius.all(
-                Radius.circular(12),
-              ),
-            ),
-            width: double.infinity,
-            child: Row(
-              children: [
-                Container(
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    color: kSecondaryColor,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(45),
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      ayah.numberInSurah!.toString(),
-                      style: kPrimaryWhiteFontStyle,
-                    ),
-                  ),
-                ),
-                Spacer(),
-                GetBuilder(
-                    init: readQuranController,
-                    id: 'updatePlay',
-                    builder: (context) {
-                      if (readQuranController.playIndex.toString() !=
-                          ayah.numberInSurah.toString()) {
-                        if (readQuranController.isStateLoadingAudio.value) {
-                          return SpinKitWave(
-                            color: kSecondaryColor,
-                          );
-                        } else {
-                          return GestureDetector(
-                            onTap: onPlay,
-                            child: Icon(
-                              Icons.play_circle_outline,
-                              color: kSecondaryColor,
-                            ),
-                          );
-                        }
-                      } else {
-                        return GestureDetector(
-                          onTap: () {
-                            readQuranController.pauseAudio();
-                          },
-                          child: Icon(
-                            Icons.pause_circle_filled,
-                            color: kSecondaryColor,
-                          ),
-                        );
-                      }
-                    }),
-                const SizedBox(
-                  width: 10,
-                ),
-                Icon(
-                  Icons.share_outlined,
-                  color: kSecondaryColor,
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+    return GetBuilder(
+        init: settingController,
+        id: 'settingUpdate',
+        builder: (context) {
+          return Container(
+            margin: EdgeInsets.only(bottom: 15),
             child: Column(
               children: [
-                //ARAB
                 Container(
-                  width: double.infinity,
-                  child: Text(
-                    ayah.text!,
-                    textAlign: TextAlign.end,
-                    style: kArabicFontAmiri.copyWith(fontSize: 35, fontWeight: FontWeight.w500),
+                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                  child: Column(
+                    children: [
+                      //ARAB
+                      settingController.arabic
+                          ? Container(
+                              margin: EdgeInsets.only(bottom: 15),
+                              width: double.infinity,
+                              child: Text(
+                                ayah.text!,
+                                textAlign: TextAlign.end,
+                                style: kArabicFontAmiri.copyWith(
+                                    fontSize: 35, fontWeight: FontWeight.w500),
+                              ),
+                            )
+                          : SizedBox(),
+                      //Latin
+                      settingController.latin
+                          ? Container(
+                              margin: EdgeInsets.only(bottom: 15),
+                              width: double.infinity,
+                              child: Text(
+                                ayahTranslate!.text!,
+                                textAlign: TextAlign.end,
+                                style: kArabicFontAmiri.copyWith(
+                                    fontSize: 16, fontWeight: FontWeight.w500, color: Colors.blue),
+                              ),
+                            )
+                          : SizedBox(),
+                      //Translate
+                      settingController.terjemahan ? Container(
+                        width: double.infinity,
+                        child: Text(
+                          ayahTranslate!.text!,
+                          textAlign: TextAlign.start,
+                          style:
+                              kPrimaryFontStyle.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
+                        )
+                      ): SizedBox(),
+                    ],
                   ),
                 ),
                 SizedBox(
                   height: 15,
                 ),
-                //Translate
                 Container(
-                  width: double.infinity,
-                  child: Text(
-                    ayahTranslate!.text!,
-                    textAlign: TextAlign.start,
-                    style: kPrimaryFontStyle.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  decoration: BoxDecoration(
+                    color: kSecondaryColorMoreBlack.withOpacity(0.15),
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(12),
+                    ),
                   ),
-                )
+                  width: double.infinity,
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 24,
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: kSecondaryColor,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(45),
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            ayah.numberInSurah!.toString(),
+                            style: kPrimaryWhiteFontStyle,
+                          ),
+                        ),
+                      ),
+                      Spacer(),
+                      GetBuilder(
+                          init: readQuranController,
+                          id: 'updatePlay',
+                          builder: (context) {
+                            if (readQuranController.playIndex.toString() !=
+                                ayah.numberInSurah.toString()) {
+                              if (readQuranController.isStateLoadingAudio.value) {
+                                return SpinKitWave(
+                                  color: kSecondaryColor,
+                                );
+                              } else {
+                                return GestureDetector(
+                                  onTap: onPlay,
+                                  child: Icon(
+                                    Icons.play_circle_outline,
+                                    color: kSecondaryColor,
+                                  ),
+                                );
+                              }
+                            } else {
+                              return GestureDetector(
+                                onTap: () {
+                                  readQuranController.pauseAudio();
+                                },
+                                child: Icon(
+                                  Icons.pause_circle_filled,
+                                  color: kSecondaryColor,
+                                ),
+                              );
+                            }
+                          }),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Icon(
+                        Icons.share_outlined,
+                        color: kSecondaryColor,
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
-          ),
-        ],
-      ),
-    );
+          );
+        });
   }
 }
 

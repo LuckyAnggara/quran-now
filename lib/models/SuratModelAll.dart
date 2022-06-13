@@ -4,28 +4,34 @@
 
 class SuratModelAll {
   SuratModelAll({
-    this.number,
-    this.sequence,
-    this.numberOfVerses,
-    this.name,
-    this.revelation,
-    this.tafsir,
+    this.nomor,
+    this.nama,
+    this.namaLatin,
+    this.jumlahAyat,
+    this.tempatTurun,
+    this.arti,
+    this.deskripsi,
+    this.audio,
   });
 
-  int? number;
-  int? sequence;
-  int? numberOfVerses;
-  NameSurat? name;
-  RevelationSurat? revelation;
-  TafsirSurat? tafsir;
+  int? nomor;
+  String? nama;
+  String? namaLatin;
+  int? jumlahAyat;
+  String? tempatTurun;
+  String? arti;
+  String? deskripsi;
+  String? audio;
 
   factory SuratModelAll.fromJson(Map<String, dynamic> json) => SuratModelAll(
-        number: json["number"],
-        sequence: json["sequence"],
-        numberOfVerses: json["numberOfVerses"],
-        name: NameSurat.fromJson(json["name"]),
-        revelation: RevelationSurat.fromJson(json["revelation"]),
-        tafsir: TafsirSurat.fromJson(json["tafsir"]),
+        nomor: json["nomor"],
+        nama: json["nama"],
+        namaLatin: json["nama_latin"],
+        jumlahAyat: json["jumlah_ayat"],
+        tempatTurun: json["tempat_turun"],
+        arti: json["arti"],
+        deskripsi: json["deskripsi"],
+        audio: json["audio"],
       );
 }
 

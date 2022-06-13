@@ -97,12 +97,13 @@ class FullQuranScreen extends StatelessWidget {
                             );
                           } else {
                             return ListView.separated(
+                                controller: quranController.scrollController,
                                 separatorBuilder: (context, int) {
                                   return Divider();
                                 },
                                 physics: const BouncingScrollPhysics(),
                                 scrollDirection: Axis.vertical,
-                                itemCount: quranController.listSurat.length,
+                                itemCount: quranController.pageSize.value,
                                 itemBuilder: (context, index) {
                                   SuratModelAll surat = quranController.listSurat[index];
                                   if (index == 2) {
@@ -128,13 +129,13 @@ class FullQuranScreen extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Get.toNamed(
-          '/read-quran',
+          '/read-quran/${surat.nomor}',
           arguments: {
-            'number': surat.number,
-            'name': surat.name!.transliteration!.id,
-            'translation': surat.name!.translation!.id,
-            'revelation': surat.revelation!.id,
-            'ayat': surat.numberOfVerses
+            'number': surat.nomor,
+            'name': surat.namaLatin,
+            'translation': surat.arti,
+            'revelation': surat.tempatTurun,
+            'ayat': surat.jumlahAyat
           },
         );
       },
@@ -147,7 +148,7 @@ class FullQuranScreen extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    surat.number.toString(),
+                    surat.nomor.toString(),
                     style: kPrimaryFontStyle.copyWith(fontSize: 16),
                   ),
                   SizedBox(
@@ -157,15 +158,16 @@ class FullQuranScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        surat.name!.transliteration!.id!,
+                        surat.namaLatin!,
                         style: kPrimaryFontStyle.copyWith(fontSize: 15, letterSpacing: 1.2),
                       ),
                       SizedBox(
                         height: 3,
                       ),
                       Text(
-                        surat.name!.translation!.id!,
-                        style: kSecondaryGreyFontStyle.copyWith(fontSize: 13),
+                        surat.arti!,
+                        style: kSecondaryGreyFontStyle.copyWith(
+                            fontSize: 13, overflow: TextOverflow.ellipsis),
                       ),
                     ],
                   ),
@@ -178,7 +180,7 @@ class FullQuranScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    surat.name!.short!,
+                    surat.nama!,
                     style: kArabicFontAmiri.copyWith(fontSize: 18, letterSpacing: 1.2),
                   ),
                   SizedBox(

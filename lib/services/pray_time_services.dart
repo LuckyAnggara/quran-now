@@ -11,7 +11,8 @@ class PrayTimeServices {
 
   Future<JadwalSolatModel?> fetchJadwal(String locationId) async {
     try {
-      var response = await _dio.get('${ApiConstants.prayTimeUrl}/$locationId/2022/05/22');
+      var response =
+          await _dio.get('${ApiConstants.prayTimeUrl}/sholat/jadwal/$locationId/2022/05/22');
       if (response.statusCode == 200) {
         return JadwalSolatModel.fromJson(response.data['data']['jadwal']);
       } else {
@@ -25,7 +26,7 @@ class PrayTimeServices {
 
   Future<List<KotaModel>?> fetchAllKota() async {
     try {
-      var response = await _dio.get('${ApiConstants.prayTimeUrl}/kota/semua');
+      var response = await _dio.get('${ApiConstants.prayTimeUrl}/sholat/kota/semua');
       if (response.statusCode == 200) {
         return List<KotaModel>.from(response.data.map((x) => KotaModel.fromJson(x)));
       } else {

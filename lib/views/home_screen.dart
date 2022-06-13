@@ -27,27 +27,30 @@ class HomeScreen extends StatelessWidget {
                 rightIcon: [Icon(Icons.person_outline), Icon(Icons.settings_outlined)],
               ),
               Expanded(
-                  child: ListView(
-                physics: BouncingScrollPhysics(),
-                children: [
-                  LocationWidget(),
-                  SizedBox(
-                    height: Get.height * .45,
-                    width: Get.width,
-                    child: Stack(
-                      children: [
-                        const DateCardWidget(),
-                        const AyatOfTheDayCard(),
-                      ],
-                    ),
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      LocationWidget(),
+                      SizedBox(
+                        height: Get.height * .45,
+                        width: Get.width,
+                        child: Stack(
+                          children: [
+                            DateCardWidget(),
+                            AyatOfTheDayCard(),
+                          ],
+                        ),
+                      ),
+                      PrayerTimeWidget(),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      MenuWidget()
+                    ],
                   ),
-                  PrayerTimeWidget(),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  MenuWidget()
-                ],
-              ))
+                ),
+              )
             ],
           ),
         ),

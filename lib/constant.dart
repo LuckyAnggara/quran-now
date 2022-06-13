@@ -44,8 +44,9 @@ TextStyle kArabicFontNotoArabic =
     GoogleFonts.notoSansArabic(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.black);
 
 class ApiConstants {
-  static String prayTimeUrl = 'https://api.myquran.com/v1/sholat';
-  static String quranUrl = 'https://api.quran.sutanlab.id';
+  static String prayTimeUrl = 'https://api.myquran.com/v1/';
+  // static String quranUrl = 'https://api.quran.sutanlab.id';
+  static String quranUrl = 'https://equran.id/api/';
   static String quranUrlv2 = 'https://api.alquran.cloud/v1';
 // static String baseUrl = 'https://siapbaper.bbmakmur.com/api';
 // static String baseUrl = 'http://127.0.0.1:8000/api';

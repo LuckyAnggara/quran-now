@@ -12,14 +12,12 @@ class QuranService {
   final Dio _dio = Dio();
 
   Future<List<SuratModelAll>?> fetchAllSurat() async {
-    var url = Uri.parse('${ApiConstants.quranUrl}/surah');
-
+    var url = Uri.parse('${ApiConstants.quranUrl}/surat');
     try {
       var response = await http.get(url);
       if (response.statusCode == 200) {
         List<SuratModelAll> result = List<SuratModelAll>.from(
-            jsonDecode(response.body)["data"].map((x) => SuratModelAll.fromJson(x)));
-        // SuratModel.fromJson(response.data['data']);
+            jsonDecode(response.body).map((x) => SuratModelAll.fromJson(x)));
         return result;
       } else {
         throw Exception();

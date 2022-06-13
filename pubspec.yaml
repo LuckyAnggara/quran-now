@@ -49,6 +49,9 @@ dependencies:
   drop_shadow: ^0.0.1+4
   just_audio: ^0.9.24
   modal_bottom_sheet: ^2.0.1
+  infinite_scroll_pagination: ^3.2.0
+  settings_ui: ^2.0.2
+  get_storage: ^2.0.3
 
 dev_dependencies:
   flutter_test:
