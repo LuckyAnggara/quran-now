@@ -4,13 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:qurannow/models/SurahDetailModel.dart';
+import 'package:qurannow/models/quran/Surat.dart';
 import 'package:qurannow/services/quran_service.dart';
 
 class ReadQuranController extends GetxController {
   var isLoading = false.obs;
+  var isAudioLoad = false.obs;
   var isStateLoadingAudio = false.obs;
-  QuranService _quranService = QuranService();
-  var surat = Rxn<SurahDetailModel>();
+  final QuranService _quranService = QuranService();
+  var audio = Rxn<SurahDetailModel?>();
+  var surat = Rxn<Surat?>();
   final player = AudioPlayer();
   var playIndex = ''.obs;
   var isAudioPlay = false.obs;
@@ -58,8 +61,8 @@ class ReadQuranController extends GetxController {
     if (scrollController.offset >= scrollController.position.maxScrollExtent) {
       pageSize.value = pageSize.value + 10;
       print(pageSize.value);
-      if (pageSize.value > surat.value!.data![0].ayahs!.length) {
-        pageSize(surat.value!.data![0].ayahs!.length);
+      if (pageSize.value > surat.value!.jumlahAyat) {
+        pageSize(surat.value!.jumlahAyat);
       }
     }
   }
@@ -80,14 +83,29 @@ class ReadQuranController extends GetxController {
   void fetchSurat(suratNumber) async {
     try {
       isLoading(true);
-      // var data = await _quranService.fetchSurat(suratNumber);
-      var data = await _quranService.fetchSuratv2(suratNumber);
+      var data = await _quranService.fetchSurat(suratNumber);
+      // var data = await _quranService.fetchSuratv2(suratNumber);
       if (data != null) {
         surat.value = data;
       }
     } finally {
-      isLoading(false);
-      update();
+      fetchAudio(suratNumber).then((value) {
+        isLoading(false);
+        update(['updateListAyat']);
+      });
+    }
+  }
+
+  Future fetchAudio(suratNumber) async {
+    try {
+      isAudioLoad(true);
+      var data = await _quranService.fetchAudio(suratNumber);
+      if (data != null) {
+        audio.value = data;
+      }
+    } finally {
+      isAudioLoad(false);
+      update(['updateAudio']);
     }
   }
 

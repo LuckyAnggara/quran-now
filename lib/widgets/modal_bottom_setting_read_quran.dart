@@ -8,7 +8,8 @@ class ModalBottomSettingQuran extends StatelessWidget {
   final Widget child;
   final Color? backgroundColor;
 
-  ModalBottomSettingQuran({Key? key, required this.child, this.backgroundColor}) : super(key: key);
+  ModalBottomSettingQuran({Key? key, required this.child, this.backgroundColor})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -125,10 +126,9 @@ class ModalFitSetting extends StatelessWidget {
                   title: Text('Ukuran Font'),
                   leading: Icon(Icons.format_size),
                   trailing: GestureDetector(
-                    onTap: () => showFloatingModalBottomSheet(
-                      context: context,
-                      builder: (context) => ModalFitFont(),
-                    ),
+                    onTap: () {
+                      Get.toNamed('font-size-screen-setting');
+                    },
                     child: Icon(
                       Icons.arrow_forward_ios,
                     ),

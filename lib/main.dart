@@ -5,6 +5,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:qurannow/views/full_quran_screen.dart';
 import 'package:qurannow/views/home_screen.dart';
 import 'package:qurannow/views/read_quran_screen.dart';
+import 'package:qurannow/views/setting/font_size_screen.dart';
 
 void main() async {
   await GetStorage.init();
@@ -18,8 +19,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(initialRoute: '/', getPages: [
-      GetPage(name: '/', page: () => HomeScreen(), transition: Transition.fadeIn),
-      GetPage(name: '/full-quran', page: () => FullQuranScreen(), transition: Transition.fadeIn),
+      GetPage(
+          name: '/', page: () => HomeScreen(), transition: Transition.fadeIn),
+      GetPage(
+          name: '/full-quran',
+          page: () => FullQuranScreen(),
+          transition: Transition.fadeIn),
+      GetPage(
+          name: '/font-size-screen-setting',
+          page: () => FontSizeScreenSetting(),
+          transition: Transition.leftToRight),
       GetPage(
           name: '/read-quran/:number',
           page: () => ReadQuranScreen(),

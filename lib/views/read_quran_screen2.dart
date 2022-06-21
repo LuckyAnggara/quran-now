@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:qurannow/constant.dart';
 import 'package:qurannow/controllers/settings_controller.dart';
-import 'package:qurannow/models/quran/Surat.dart';
+import 'package:qurannow/models/SurahDetailModel.dart';
 import 'package:qurannow/widgets/app_bar_widget.dart';
 import 'package:qurannow/widgets/modal_bottom_setting_read_quran.dart';
 
 import '../controllers/quran/read_quran_controller.dart';
 
-class ReadQuranScreen extends StatelessWidget {
-  ReadQuranScreen({Key? key}) : super(key: key);
+class ReadQuranScreen2 extends StatelessWidget {
+  ReadQuranScreen2({Key? key}) : super(key: key);
   ReadQuranController readQuranController = Get.put(ReadQuranController());
   SettingsController settingsController = Get.put(SettingsController());
 
@@ -60,42 +59,38 @@ class ReadQuranScreen extends StatelessWidget {
                         SizedBox(
                           height: 20,
                         ),
-                        GetBuilder(
-                            init: readQuranController,
-                            id: 'updateListAyat',
-                            builder: (context) {
-                              if (readQuranController.isLoading.value) {
-                                return Center(
-                                  child: SpinKitWave(
-                                    color: kSecondaryColor,
-                                  ),
-                                );
-                              } else {
-                                var data = readQuranController.surat.value;
-                                var dataAudio =
-                                    readQuranController.audio.value?.data?[1];
-                                print(dataAudio);
-                                // var dataTranslate =
-                                //     readQuranController.surat.value!.data![2];
+                        Obx(() {
+                          if (readQuranController.isLoading.value) {
+                            return Center(
+                              child: SpinKitWave(
+                                color: kSecondaryColor,
+                              ),
+                            );
+                          } else {
+                            var data =
+                                readQuranController.surat.value!.data![0];
+                            var dataAudio =
+                                readQuranController.surat.value!.data![1];
+                            var dataTranslate =
+                                readQuranController.surat.value!.data![2];
 
-                                return Column(
-                                  children: List.generate(
-                                      readQuranController.pageSize.value,
-                                      (index) {
-                                    return AyahWidget(
-                                      onPlay: () {
-                                        readQuranController.playAudio(
-                                          dataAudio!.ayahs![index].audio!,
-                                          dataAudio
-                                              .ayahs![index].numberInSurah!,
-                                        );
-                                      },
-                                      ayat: data!.ayat[index],
+                            return Column(
+                              children: List.generate(
+                                  readQuranController.pageSize.value, (index) {
+                                return AyahWidget(
+                                  onPlay: () {
+                                    readQuranController.playAudio(
+                                      dataAudio.ayahs![index].audio!,
+                                      dataAudio.ayahs![index].numberInSurah!,
                                     );
-                                  }).toList(),
+                                  },
+                                  ayah: data.ayahs![index],
+                                  ayahTranslate: dataTranslate.ayahs![index],
                                 );
-                              }
-                            })
+                              }).toList(),
+                            );
+                          }
+                        })
                       ],
                     ),
                   ),
@@ -110,16 +105,16 @@ class ReadQuranScreen extends StatelessWidget {
 }
 
 class AyahWidget extends StatelessWidget {
-  final Ayat ayat;
-  // final Ayah? ayahTranslate;
+  final Ayah ayah;
+  final Ayah? ayahTranslate;
   final VoidCallback onPlay;
 
   final readQuranController = Get.find<ReadQuranController>();
   final settingController = Get.find<SettingsController>();
 
   AyahWidget({
-    required this.ayat,
-    // this.ayahTranslate,
+    required this.ayah,
+    this.ayahTranslate,
     required this.onPlay,
   });
 
@@ -143,11 +138,10 @@ class AyahWidget extends StatelessWidget {
                               margin: EdgeInsets.only(bottom: 15),
                               width: double.infinity,
                               child: Text(
-                                ayat.ar,
+                                ayah.text!,
                                 textAlign: TextAlign.end,
                                 style: kArabicFontAmiri.copyWith(
-                                    fontSize: settingController.fontSizeArabic,
-                                    fontWeight: FontWeight.w500),
+                                    fontSize: 35, fontWeight: FontWeight.w500),
                               ),
                             )
                           : SizedBox(),
@@ -156,26 +150,14 @@ class AyahWidget extends StatelessWidget {
                           ? Container(
                               margin: EdgeInsets.only(bottom: 15),
                               width: double.infinity,
-                              child: Html(
-                                data: """${ayat.tr}""",
-                                style: {
-                                  "body": Style(
-                                    fontSize: FontSize(
-                                        settingController.fontSizeLatin),
-                                    color: Colors.green,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                },
+                              child: Text(
+                                ayahTranslate!.text!,
+                                textAlign: TextAlign.end,
+                                style: kArabicFontAmiri.copyWith(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.blue),
                               ),
-
-                              // Text(
-                              //   ayat.tr,
-                              //   textAlign: TextAlign.end,
-                              //   style: kArabicFontAmiri.copyWith(
-                              //       fontSize: 16,
-                              //       fontWeight: FontWeight.w500,
-                              //       color: Colors.black),
-                              // ),
                             )
                           : SizedBox(),
                       //Translate
@@ -183,12 +165,10 @@ class AyahWidget extends StatelessWidget {
                           ? Container(
                               width: double.infinity,
                               child: Text(
-                                ayat.idn,
+                                ayahTranslate!.text!,
                                 textAlign: TextAlign.start,
                                 style: kPrimaryFontStyle.copyWith(
-                                    fontSize:
-                                        settingController.fontSizeTerjemahan,
-                                    fontWeight: FontWeight.w500),
+                                    fontSize: 16, fontWeight: FontWeight.w500),
                               ))
                           : SizedBox(),
                     ],
@@ -219,7 +199,7 @@ class AyahWidget extends StatelessWidget {
                         ),
                         child: Center(
                           child: Text(
-                            ayat.nomor.toString(),
+                            ayah.numberInSurah!.toString(),
                             style: kPrimaryWhiteFontStyle,
                           ),
                         ),
@@ -230,7 +210,7 @@ class AyahWidget extends StatelessWidget {
                           id: 'updatePlay',
                           builder: (context) {
                             if (readQuranController.playIndex.toString() !=
-                                ayat.nomor.toString()) {
+                                ayah.numberInSurah.toString()) {
                               if (readQuranController
                                   .isStateLoadingAudio.value) {
                                 return SpinKitWave(

@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:qurannow/constant.dart';
-import 'package:qurannow/controllers/quran_controller.dart';
+import 'package:qurannow/controllers/quran/quran_controller.dart';
 import 'package:qurannow/models/SuratModelAll.dart';
 import 'package:qurannow/widgets/app_bar_widget.dart';
 
 class FullQuranScreen extends StatelessWidget {
   FullQuranScreen({Key? key}) : super(key: key);
 
-  final QuranController quranController = Get.put(QuranController(), tag: 'quranController');
+  final QuranController quranController =
+      Get.put(QuranController(), tag: 'quranController');
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +52,8 @@ class FullQuranScreen extends StatelessWidget {
                   children: [
                     Text(
                       'Terakhir dibaca',
-                      style: kPrimaryFontStyle.copyWith(fontSize: 14, fontWeight: FontWeight.w500),
+                      style: kPrimaryFontStyle.copyWith(
+                          fontSize: 14, fontWeight: FontWeight.w500),
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 10, bottom: 10),
@@ -84,7 +86,9 @@ class FullQuranScreen extends StatelessWidget {
                       Text(
                         'Surat',
                         style: kPrimaryFontStyle.copyWith(
-                            fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1.5),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.5),
                       ),
                       SizedBox(
                         height: 15,
@@ -105,7 +109,8 @@ class FullQuranScreen extends StatelessWidget {
                                 scrollDirection: Axis.vertical,
                                 itemCount: quranController.pageSize.value,
                                 itemBuilder: (context, index) {
-                                  SuratModelAll surat = quranController.listSurat[index];
+                                  SuratModelAll surat =
+                                      quranController.listSurat[index];
                                   if (index == 2) {
                                     return listSurat(surat, true);
                                   }
@@ -159,7 +164,8 @@ class FullQuranScreen extends StatelessWidget {
                     children: [
                       Text(
                         surat.namaLatin!,
-                        style: kPrimaryFontStyle.copyWith(fontSize: 15, letterSpacing: 1.2),
+                        style: kPrimaryFontStyle.copyWith(
+                            fontSize: 15, letterSpacing: 1.2),
                       ),
                       SizedBox(
                         height: 3,
@@ -181,7 +187,8 @@ class FullQuranScreen extends StatelessWidget {
                 children: [
                   Text(
                     surat.nama!,
-                    style: kArabicFontAmiri.copyWith(fontSize: 18, letterSpacing: 1.2),
+                    style: kArabicFontAmiri.copyWith(
+                        fontSize: 18, letterSpacing: 1.2),
                   ),
                   SizedBox(
                     width: 20,
