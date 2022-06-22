@@ -91,22 +91,17 @@ class ReadQuranController extends GetxController {
     } finally {
       fetchAudio(suratNumber).then((value) {
         isLoading(false);
+        audio.value = value;
+
         update(['updateListAyat']);
+        update(['updateAudio']);
       });
     }
   }
 
   Future fetchAudio(suratNumber) async {
-    try {
-      isAudioLoad(true);
-      var data = await _quranService.fetchAudio(suratNumber);
-      if (data != null) {
-        audio.value = data;
-      }
-    } finally {
-      isAudioLoad(false);
-      update(['updateAudio']);
-    }
+    var data = await _quranService.fetchAudio(suratNumber);
+    return data;
   }
 
   Future ss() async {

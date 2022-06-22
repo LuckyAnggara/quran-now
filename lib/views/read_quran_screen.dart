@@ -27,13 +27,13 @@ class ReadQuranScreen extends StatelessWidget {
             builder: (context) => ModalFitSetting(),
           ),
           backgroundColor: kSecondaryColor.withOpacity(1),
-          child: Icon(
+          child: const Icon(
             Icons.more_horiz,
           ),
         ),
         backgroundColor: kPrimaryColor,
         body: Container(
-          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
           child: Column(
             children: [
               AppBarWidget(
@@ -41,7 +41,7 @@ class ReadQuranScreen extends StatelessWidget {
                   readQuranController.pauseAudio();
                   Get.back();
                 },
-                leftIcon: Icon(Icons.arrow_back_ios),
+                leftIcon: const Icon(Icons.arrow_back_ios),
                 title: Get.arguments['name'],
                 // rightIcon: [
                 //   Icon(Icons.bookmark_outline),
@@ -53,51 +53,47 @@ class ReadQuranScreen extends StatelessWidget {
                 child: SingleChildScrollView(
                   controller: readQuranController.scrollController,
                   physics: BouncingScrollPhysics(),
-                  child: Container(
-                    child: Column(
-                      children: [
-                        CardDetailSurah(),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        GetBuilder(
-                            init: readQuranController,
-                            id: 'updateListAyat',
-                            builder: (context) {
-                              if (readQuranController.isLoading.value) {
-                                return Center(
-                                  child: SpinKitWave(
-                                    color: kSecondaryColor,
-                                  ),
-                                );
-                              } else {
-                                var data = readQuranController.surat.value;
-                                var dataAudio =
-                                    readQuranController.audio.value?.data?[1];
-                                print(dataAudio);
-                                // var dataTranslate =
-                                //     readQuranController.surat.value!.data![2];
+                  child: Column(
+                    children: [
+                      const CardDetailSurah(),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      GetBuilder(
+                          init: readQuranController,
+                          id: 'updateListAyat',
+                          builder: (context) {
+                            if (readQuranController.isLoading.value) {
+                              return Center(
+                                child: SpinKitWave(
+                                  color: kSecondaryColor,
+                                ),
+                              );
+                            } else {
+                              var data = readQuranController.surat.value;
+                              var dataAudio =
+                                  readQuranController.audio.value?.data?[0];
+                              // var dataTranslate =
+                              //     readQuranController.surat.value!.data![2];
 
-                                return Column(
-                                  children: List.generate(
-                                      readQuranController.pageSize.value,
-                                      (index) {
-                                    return AyahWidget(
-                                      onPlay: () {
-                                        readQuranController.playAudio(
-                                          dataAudio!.ayahs![index].audio!,
-                                          dataAudio
-                                              .ayahs![index].numberInSurah!,
-                                        );
-                                      },
-                                      ayat: data!.ayat[index],
-                                    );
-                                  }).toList(),
-                                );
-                              }
-                            })
-                      ],
-                    ),
+                              return Column(
+                                children: List.generate(
+                                    readQuranController.pageSize.value,
+                                    (index) {
+                                  return AyahWidget(
+                                    onPlay: () {
+                                      readQuranController.playAudio(
+                                        dataAudio!.ayahs![index].audio!,
+                                        dataAudio.ayahs![index].numberInSurah!,
+                                      );
+                                    },
+                                    ayat: data!.ayat[index],
+                                  );
+                                }).toList(),
+                              );
+                            }
+                          })
+                    ],
                   ),
                 ),
               )
@@ -130,6 +126,15 @@ class AyahWidget extends StatelessWidget {
         id: 'settingUpdate',
         builder: (context) {
           return Container(
+            decoration: BoxDecoration(
+              color: readQuranController.playIndex.toString() !=
+                      ayat.nomor.toString()
+                  ? Colors.transparent
+                  : kSecondaryColorMoreBlack.withOpacity(0.15),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(12),
+              ),
+            ),
             margin: EdgeInsets.only(bottom: 15),
             child: Column(
               children: [
