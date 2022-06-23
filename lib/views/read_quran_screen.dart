@@ -238,7 +238,8 @@ class AyahWidget extends StatelessWidget {
                                 ayat.nomor.toString()) {
                               if (readQuranController
                                   .isStateLoadingAudio.value) {
-                                return SpinKitWave(
+                                return SpinKitCircle(
+                                  size: 14,
                                   color: kSecondaryColor,
                                 );
                               } else {

@@ -2,15 +2,19 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:qurannow/models/SurahDetailModel.dart';
 import 'package:qurannow/models/quran/Surat.dart';
 import 'package:qurannow/services/quran_service.dart';
 
+enum PlayState { play, stop, loading }
+
 class ReadQuranController extends GetxController {
   var isLoading = false.obs;
   var isAudioLoad = false.obs;
   var isStateLoadingAudio = false.obs;
+
   final QuranService _quranService = QuranService();
   var audio = Rxn<SurahDetailModel?>();
   var surat = Rxn<Surat?>();
@@ -34,11 +38,11 @@ class ReadQuranController extends GetxController {
           isStateLoadingAudio(false);
           update(['updatePlay']);
           break;
-        case ProcessingState.idle:
-          break;
-        case ProcessingState.loading:
-          isStateLoadingAudio(true);
-          break;
+        // case ProcessingState.idle:
+        //   break;
+        // case ProcessingState.loading:
+        //   isStateLoadingAudio(true);
+        //   break;
         case ProcessingState.buffering:
           break;
       }
@@ -74,10 +78,17 @@ class ReadQuranController extends GetxController {
   }
 
   void playAudio(String url, int number) async {
-    await player.setUrl(url);
-    player.play();
-    playIndex(number.toString());
-    update(['updatePlay']);
+    try {
+      isStateLoadingAudio(true);
+      update(['updatePlay']);
+
+      await player.setUrl(url);
+      player.play();
+      playIndex(number.toString());
+      update(['updatePlay']);
+    } finally {
+      isStateLoadingAudio(false);
+    }
   }
 
   void fetchSurat(suratNumber) async {
